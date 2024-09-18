@@ -1,0 +1,13 @@
+const express = require("express")
+const { getAllProducts, CreateProduct, UpdateProduct, DeleteProduct, GetProductDetails, createProductReview, getProductReviews, deleteReview, getDemanedProducts } = require("../Controllers/ProductController")
+const { isAuthenticatedUser, authorizedRoles } = require("../Middleware/Auth")
+const Router = express.Router()
+Router.route("/products").get(getAllProducts)
+Router.route("/Demadedproducts").get(getDemanedProducts)
+Router.route("/products/:id").get(getAllProducts)
+Router.route("/product/new").post(isAuthenticatedUser, authorizedRoles("admin", "seller"), CreateProduct)
+Router.route("/product/:id").put(isAuthenticatedUser, authorizedRoles("admin"), UpdateProduct).delete(isAuthenticatedUser, authorizedRoles("admin"), DeleteProduct)
+Router.route("/product/:id").get(GetProductDetails)
+Router.route("/review").put(isAuthenticatedUser,createProductReview)
+Router.route("/review").get(getProductReviews).delete(isAuthenticatedUser,deleteReview)
+module.exports = Router
